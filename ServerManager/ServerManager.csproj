@@ -116,5 +116,14 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dropshadow3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fewfew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fewfew1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

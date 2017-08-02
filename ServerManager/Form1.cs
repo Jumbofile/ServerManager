@@ -18,9 +18,13 @@ namespace ServerManager
         private PictureBox sideArea = new PictureBox();
         private Label headerText = new Label();
         private FlowLayoutPanel serverArea = new FlowLayoutPanel();
+        private Label extraText = new Label();
+
         //private Panel tesgt = new Panel();
        
+        //Setting picbox which allows everthing to work
         public int picBox_ID = 0;
+        public int onlineCount = 0;
 
 
         //ArrayList testBruh = new ArrayList();
@@ -49,16 +53,6 @@ namespace ServerManager
         //Form loading
         private void Suite_Load(object sender, EventArgs e)
         {
-            //Load GUI
-            guiInit();
-            
-            //Excel read
-            excelRead();
-
-            MessageBox.Show(serverIPs.Count.ToString());
-            //serverCard make
-            excelToCard(serverIPs.Count);
-
             //making stuff invisible
             label1.Visible = false;
             label2.Visible = false;
@@ -69,8 +63,15 @@ namespace ServerManager
             button3.Visible = false;
             pictureBox2.Visible = false;
 
-            //FORDEV
-            pictureBox1.Visible = false;
+            //Load GUI
+            guiInit();
+            
+            //Excel read
+            excelRead();
+
+           // MessageBox.Show(serverIPs.Count.ToString());
+            //serverCard make
+            excelToCard(serverIPs.Count);
         }
 
         //making cards using excel
@@ -152,9 +153,24 @@ namespace ServerManager
         //Sets up the default GUI for the program
         private void guiInit()
         {
+            //no maximize
+            this.MaximizeBox = false;
+
+            //extra text
+            this.extraText.AutoSize = true;
+            this.extraText.BackColor = System.Drawing.Color.Navy;
+            this.extraText.Font = new System.Drawing.Font("Mistral", 22F);
+            this.extraText.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.extraText.Location = new System.Drawing.Point(225, 10);
+            this.extraText.Name = "extraText";
+            this.extraText.Size = new System.Drawing.Size(178, 29);
+            this.extraText.TabIndex = 0;
+            this.extraText.Text = "";
+            this.Controls.Add(extraText);
+
             //text
             this.headerText.AutoSize = true;
-            this.headerText.BackColor = System.Drawing.Color.DarkSlateBlue;
+            this.headerText.BackColor = System.Drawing.Color.Navy;
             this.headerText.Font = new System.Drawing.Font("Roboto Lt", 22F);
             this.headerText.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.headerText.Location = new System.Drawing.Point(12, 5);
@@ -165,7 +181,7 @@ namespace ServerManager
             this.Controls.Add(headerText);
 
             //Background GUI
-            this.headerArea.BackColor = Color.DarkSlateBlue;
+            this.headerArea.BackColor = Color.Navy;
             this.headerArea.Size = new System.Drawing.Size(1920, 50);
             this.headerArea.Location = new System.Drawing.Point(0, 0);
             this.Controls.Add(headerArea);
@@ -193,7 +209,7 @@ namespace ServerManager
             this.Controls.Add(dropShadow1);
 
             //server panel
-            this.serverArea.Size = new Size(843, 550);
+            this.serverArea.Size = new Size(865, 550);
             this.serverArea.Location = new Point(140, 55);
             this.serverArea.AutoScroll = true;
             this.Controls.Add(serverArea);
@@ -250,39 +266,49 @@ namespace ServerManager
                 Label serverNameLabel = new Label();
                 Label serverIPLabel = new Label();
                 Panel tesgt = new Panel();
+                PictureBox dropShadowCard = new PictureBox();
+
+                //Drop shadow
+                dropShadowCard.Image = global::ServerManager.Properties.Resources.fewfew1;
+                dropShadowCard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+                dropShadowCard.Location = new System.Drawing.Point(0, 0);
+                dropShadowCard.Name = "dropShadowCard" + picBox_ID;
+                dropShadowCard.Size = new System.Drawing.Size(cardSizeX + 5, cardSizeY + 5);
+                dropShadowCard.TabStop = false;
+                dropShadowCard.BackColor = Color.FromArgb(225, 225, 225);
 
                 //Panel
-                tesgt.Size = new Size(cardSizeX, cardSizeY);
-                tesgt.Top = startY;
-                tesgt.Left = startX;
-                tesgt.BackColor = Color.Black;
+                tesgt.Size = new Size(cardSizeX + 6, cardSizeY + 6);
+                tesgt.Top = startY - 3;
+                tesgt.Left = startX - 3;
+               // tesgt.BackColor = Color.Black;
                 tesgt.Name = "tesgt" + picBox_ID;
 
                 //Specifics for card
                 cardBack.Size = new Size(cardSizeX, cardSizeY);
                 cardBack.BackColor = Color.White;
-                cardBack.Left = 0;
-                cardBack.Top = 0;
+                cardBack.Left = 3;
+                cardBack.Top = 3;
                 cardBack.Name = "cardBack" + picBox_ID;
 
                 //Ping
                 pingLabel.Size = new Size(cardSizeX, 30);
                 pingLabel.BackColor = Color.Red;
-                pingLabel.Location = new Point(0, 0);
+                pingLabel.Location = new Point(3, 3);
                 pingLabel.Name = "pingLabel" + picBox_ID;
 
                 //Server name
                 serverNameLabel.Text = name;
-                serverNameLabel.Location = new Point(1, 5);
+                serverNameLabel.Location = new Point(6, 11);
                 serverNameLabel.BackColor = Color.Red;
                 serverNameLabel.AutoSize = true;
-                serverNameLabel.Font = new System.Drawing.Font("Roboto", 12F);
+                serverNameLabel.Font = new System.Drawing.Font("Roboto", 10F);
                 serverNameLabel.ForeColor = Color.White;
                 serverNameLabel.Name = "serverNameLabel" + picBox_ID;
 
                 //Server IP
                 serverIPLabel.Text = "IP: " + ip;
-                serverIPLabel.Location = new Point(2, 40);
+                serverIPLabel.Location = new Point(5, 43);
                 serverIPLabel.BackColor = Color.FromArgb(255, 255, 255);
                 serverIPLabel.Name = "serverIPLabel" + picBox_ID;
 
@@ -292,6 +318,7 @@ namespace ServerManager
                 tesgt.Controls.Add(pingLabel);
                 tesgt.Controls.Add(serverIPLabel);
                 tesgt.Controls.Add(cardBack);
+                tesgt.Controls.Add(dropShadowCard);
 
                 Console.WriteLine(picBox_ID.ToString());
                 //Ping
@@ -308,6 +335,7 @@ namespace ServerManager
                     startX = 5;
                 }
             }
+            onlineLabel.Text = (onlineCount + "/" + picBox_ID + " Online");
         }
         //Accept button
         private void button2_Click(object sender, EventArgs e)
@@ -365,6 +393,7 @@ namespace ServerManager
                     //debug
                     Console.WriteLine(ip + " is online.");
 
+                    onlineCount++;
                 }
             }
             catch (Exception e)
@@ -386,6 +415,7 @@ namespace ServerManager
                 PictureBox tempBack2 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + i);
                 Label tempLabel1 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + i);
                 Label tempLabel2 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverNameLabel" + i);
+                PictureBox drop = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "dropShadowCard" + i);
 
                 //Removes a serverCard
                 serverNames.RemoveAt(i);
@@ -394,6 +424,7 @@ namespace ServerManager
                 tempPanel.Controls.Remove(tempBack2);
                 tempPanel.Controls.Remove(tempLabel1);
                 tempPanel.Controls.Remove(tempLabel2);
+                tempPanel.Controls.Remove(drop);
                 serverArea.Controls.Remove(tempPanel);
 
                 //Changes name of items
@@ -404,12 +435,14 @@ namespace ServerManager
                     PictureBox temp2 = temp.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + j);
                     Label temp3 = temp.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + j);
                     Label temp4 = temp.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverNameLabel" + j);
+                    PictureBox temp5 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "dropShadowCard" + i);
 
                     temp.Name = "tesgt" + (j - 1);
                     temp1.Name = "cardBack" + (j - 1);
                     temp2.Name = "pingLabel" + (j - 1);
                     temp3.Name = "serverIPLabel" + (j - 1);
                     temp4.Name = "serverNameLabel" + (j - 1);
+                    temp5.Name = "dropShadowCard" + (j - 1);
 
                 }
                 picBox_ID--;
@@ -426,6 +459,11 @@ namespace ServerManager
             //add popup for number to delete
             removeCard(0);
             Refresh();
-        }   
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
