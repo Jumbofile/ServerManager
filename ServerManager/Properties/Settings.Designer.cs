@@ -25,7 +25,7 @@ namespace ServerManager.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("c://")]
         public string fileLocation {
             get {
                 return ((string)(this["fileLocation"]));
@@ -37,7 +37,7 @@ namespace ServerManager.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("null")]
         public string username {
             get {
                 return ((string)(this["username"]));
@@ -49,7 +49,7 @@ namespace ServerManager.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("null")]
         public string password {
             get {
                 return ((string)(this["password"]));

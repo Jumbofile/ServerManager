@@ -439,7 +439,7 @@ namespace ServerManager
             Controls.Remove(panel);
 
             //adming account?
-            if (username == "")
+            if (username == "null")
             {
                 //admin login
                 label9.Visible = true;
@@ -456,6 +456,7 @@ namespace ServerManager
                 if (MessageBox.Show("Load Servers from a text Document?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //text read
+                    MessageBox.Show(Properties.Settings.Default.fileLocation);
                     selectText();
                     textRead();
                     textToCard(serverIPs.Count);
@@ -478,10 +479,13 @@ namespace ServerManager
             string ip = serverIPs[count].ToString();
             string name = serverNames[count].ToString();
             int roundTripMS = ms;
-            loadingBar.Visible = true;
-            loadingBox.Visible = true;
-            loadingLabel.Visible = true;
-            totalloadbar.Visible = true;
+            if (startUp == true || addingServer == true)
+            {
+                loadingBar.Visible = true;
+                loadingBox.Visible = true;
+                loadingLabel.Visible = true;
+                totalloadbar.Visible = true;
+            }
             loadingBar.Value = 0; ;
             totalloadbar.Maximum = serverIPs.Count * 10;
 
@@ -1074,6 +1078,7 @@ namespace ServerManager
         //Minimise the program
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.Upgrade();
             Properties.Settings.Default.Save();
             WindowState = FormWindowState.Minimized;
         }
@@ -1081,6 +1086,7 @@ namespace ServerManager
         //Kill the program
         private void xToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.Upgrade();
             Properties.Settings.Default.Save();
             Application.Exit();
         }
@@ -1187,11 +1193,6 @@ namespace ServerManager
             }
         }
 
-        private void pictureBox5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -1216,21 +1217,25 @@ namespace ServerManager
 
         private void selectText()
         {
-            //Setting script location
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.InitialDirectory = textFile;
-            openFileDialog1.Filter = "Text File (*.txt)|*.txt";
-            openFileDialog1.FilterIndex = 0;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (textFile == "c://")
             {
-                textFile = openFileDialog1.FileName;
-            }
+                //Setting script location
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            Properties.Settings.Default.fileLocation = textFile;
-            Properties.Settings.Default.Save();
+                openFileDialog1.InitialDirectory = textFile;
+                openFileDialog1.Filter = "Text File (*.txt)|*.txt";
+                openFileDialog1.FilterIndex = 0;
+                openFileDialog1.RestoreDirectory = true;
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    textFile = openFileDialog1.FileName;
+                }
+
+                Properties.Settings.Default.fileLocation = textFile;
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.Save();
+            }
 
         }
 
@@ -1239,9 +1244,11 @@ namespace ServerManager
             //MessageBox.Show("Test");
             username = textBox5.Text;
             password = textBox4.Text;
-
+            
+            Properties.Settings.Default.username = textBox5.Text;
+            Properties.Settings.Default.password = textBox4.Text;
             Properties.Settings.Default.Save();
-
+            MessageBox.Show(Properties.Settings.Default.username);
             bool valid = false;
             using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
             {
@@ -1263,6 +1270,7 @@ namespace ServerManager
                 if (MessageBox.Show("Load Servers from a text Document?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //text read
+                    MessageBox.Show(Properties.Settings.Default.fileLocation);
                     addingServer = true;
                     selectText();
                     textRead();

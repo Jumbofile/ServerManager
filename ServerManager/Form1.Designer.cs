@@ -517,7 +517,6 @@ namespace ServerManager
             this.loadingBox.Size = new System.Drawing.Size(863, 550);
             this.loadingBox.TabIndex = 32;
             this.loadingBox.TabStop = false;
-            this.loadingBox.Click += new System.EventHandler(this.pictureBox5_Click);
             // 
             // loadingBar
             // 
