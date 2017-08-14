@@ -562,14 +562,14 @@ namespace ServerManager
             this.textBox4.Name = "textBox4";
             this.textBox4.PasswordChar = '●';
             this.textBox4.Size = new System.Drawing.Size(187, 20);
-            this.textBox4.TabIndex = 39;
+            this.textBox4.TabIndex = 40;
             // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(428, 304);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 40;
+            this.button4.TabIndex = 43;
             this.button4.Text = "Login";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -610,7 +610,7 @@ namespace ServerManager
             this.textBox5.Location = new System.Drawing.Point(428, 215);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(187, 20);
-            this.textBox5.TabIndex = 43;
+            this.textBox5.TabIndex = 39;
             // 
             // Suite
             // 

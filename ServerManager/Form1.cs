@@ -7,10 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Management;
 using System.IO;
-using System.DirectoryServices.Protocols;
-using System.Net;
 using System.DirectoryServices.AccountManagement;
-using System.Text;
 
 namespace ServerManager
 {
@@ -217,6 +214,8 @@ namespace ServerManager
             textBox4.Visible = false;
             textBox5.Visible = false;
 
+
+            //Form init
             panel.Size = new Size(200, 175);
             panel.Location = new Point((Width / 2) - 100, (Height / 2) - 100);
             panel.BorderStyle = BorderStyle.FixedSingle;
@@ -274,9 +273,12 @@ namespace ServerManager
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
+            //emial user and pass set
             emailUsername = userForm.Text;
             emailPassword = passForm.Text;
 
+
+            //Login correct?
             bool valid = false;
             using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
             {
@@ -285,7 +287,7 @@ namespace ServerManager
 
             if (valid == true)
             {
-                //do stuff
+                //everything is correct, login and show main screen
                 menuStrip1.Visible = true;
                 overViewlabel.Visible = true;
                 totalLabel.Visible = true;
@@ -302,6 +304,7 @@ namespace ServerManager
                 loggedIn = true;
                 guiInit();
             }
+            //Error
             else
             {
                 MessageBox.Show("Username or Password is incorrect.", "Error");
@@ -873,6 +876,7 @@ namespace ServerManager
                 }
 
             }
+            //Error
             catch (PingException e)
             {
                 //ignore
@@ -901,7 +905,7 @@ namespace ServerManager
 
             if (picBox_ID > 0)
             {
-                //instance 
+                //setting instance 
                 Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + i);
                 PictureBox tempBack1 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "cardBack" + i);
                 PictureBox tempBack2 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + i);
@@ -924,6 +928,8 @@ namespace ServerManager
                 //Changes name of items
                 for (int j = i + 1; j < picBox_ID; j++)
                 {
+
+                    //setting instances
                     Panel temp = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + j);
                     PictureBox temp1 = temp.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "cardBack" + j);
                     PictureBox temp2 = temp.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + j);
@@ -1045,7 +1051,7 @@ namespace ServerManager
                 int temp = picBox_ID;
                 for (int i = 0; i < temp; i++)
                 {
-                    //instance 
+                    //setting instance 
                     Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + i);
                     PictureBox tempBack1 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "cardBack" + i);
                     PictureBox tempBack2 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + i);
@@ -1103,17 +1109,16 @@ namespace ServerManager
             button2.Visible = true;
             button3.Visible = true;
             pictureBox2.Visible = true;
-           // pictureBox3.Image = Properties.Resources.plusdown;
         }
 
         //Animatons
-        private void pictureBox3_MouseDown(object sender, MouseEventArgs e)
+        private void pictureBox3_MouseDown(object sender, MouseEventArgs e)  //down
         {
             pictureBox3.Image = Properties.Resources.plusdown3;
             Invalidate();
             Refresh();
         }
-        private void pictureBox3_MouseUp(object sender, MouseEventArgs e)
+        private void pictureBox3_MouseUp(object sender, MouseEventArgs e)  //up
         {
             pictureBox3.Image = Properties.Resources.plus;
             Invalidate();
@@ -1134,13 +1139,13 @@ namespace ServerManager
         }
 
         //animatons
-        private void pictureBox4_MouseDown(object sender, MouseEventArgs e)
+        private void pictureBox4_MouseDown(object sender, MouseEventArgs e)  //down
         {
             pictureBox4.Image = Properties.Resources.minusdown;
             Invalidate();
             Refresh();
         }
-        private void pictureBox4_MouseUp(object sender, MouseEventArgs e)
+        private void pictureBox4_MouseUp(object sender, MouseEventArgs e)  //up
         {
             pictureBox4.Image = Properties.Resources.minus;
             Invalidate();
@@ -1193,6 +1198,7 @@ namespace ServerManager
             }
         }
 
+        //Save button
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -1205,6 +1211,7 @@ namespace ServerManager
             MessageBox.Show("Text File Saved.", "Save");
         }
 
+        //load button
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             picBox_ID = 0;
@@ -1215,6 +1222,7 @@ namespace ServerManager
             
         }
 
+        //prompting user to select a text file
         private void selectText()
         {
             if (textFile == "c://")
@@ -1239,6 +1247,7 @@ namespace ServerManager
 
         }
 
+        //login to admin user
         private void button4_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Test");
@@ -1282,6 +1291,7 @@ namespace ServerManager
                     //nothing!
                 }
             }
+            //error
             else
             {
                 MessageBox.Show("Username or Password is incorrect.", "Error");
