@@ -53,6 +53,7 @@ namespace ServerManager
         //Server Array List
         public ArrayList serverIPs = new ArrayList();
         public ArrayList serverNames = new ArrayList();
+        public ArrayList serverStatus = new ArrayList();
 
         //Variables
         public int startX = 5;
@@ -268,50 +269,43 @@ namespace ServerManager
 
             //Pressing login
             acceptButton.Click += new EventHandler(acceptButton_Click);
-            if(click == true)
-            {
-                Console.WriteLine("hi");
-                emailUsername = userForm.Text;
-                emailPassword = passForm.Text;
-
-                bool valid = false;
-                using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
-                {
-                    valid = context.ValidateCredentials(emailUsername, emailPassword);
-                }
-
-                if (valid == true)
-                {
-                    //do stuff
-                    menuStrip1.Visible = true;
-                    overViewlabel.Visible = true;
-                    totalLabel.Visible = true;
-                    onlineLabel.Visible = true;
-                    pictureBox3.Visible = true;
-                    pictureBox4.Visible = true;
-                    panel.Controls.Remove(header);
-                    panel.Controls.Remove(userForm);
-                    panel.Controls.Remove(user);
-                    panel.Controls.Remove(passForm);
-                    panel.Controls.Remove(pass);
-                    panel.Controls.Remove(acceptButton);
-                    Controls.Remove(panel);
-                    loggedIn = true;
-                    guiInit();
-                }
-                else
-                {
-                    MessageBox.Show("Username or Password is incorrect.", "Error");
-                }
-            }
         }
   
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
-            click = true;
-            Console.WriteLine(click.ToString());
-            setEmailAccount();
+            emailUsername = userForm.Text;
+            emailPassword = passForm.Text;
+
+            bool valid = false;
+            using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
+            {
+                valid = context.ValidateCredentials(emailUsername, emailPassword);
+            }
+
+            if (valid == true)
+            {
+                //do stuff
+                menuStrip1.Visible = true;
+                overViewlabel.Visible = true;
+                totalLabel.Visible = true;
+                onlineLabel.Visible = true;
+                pictureBox3.Visible = true;
+                pictureBox4.Visible = true;
+                panel.Controls.Remove(header);
+                panel.Controls.Remove(userForm);
+                panel.Controls.Remove(user);
+                panel.Controls.Remove(passForm);
+                panel.Controls.Remove(pass);
+                panel.Controls.Remove(acceptButton);
+                Controls.Remove(panel);
+                loggedIn = true;
+                guiInit();
+            }
+            else
+            {
+                MessageBox.Show("Username or Password is incorrect.", "Error");
+            }
         }
         //editing text file
         private void editText(string ip, string name, bool add)
@@ -834,7 +828,6 @@ namespace ServerManager
             
             try
             {
-                Console.WriteLine("fff");
                 //Pings 4 times to make sure server is online
                 for (int j = 1; j <= 4; j++)
                 {
@@ -865,6 +858,8 @@ namespace ServerManager
                         temp = "<1";
                     }
 
+                    serverStatus.Add("true");
+
                     //Setting IP and MS
                     tempLabel2.BackColor = Color.FromArgb(76, 175, 80);
                     tempBack2.BackColor = Color.FromArgb(76, 175, 80);
@@ -882,6 +877,7 @@ namespace ServerManager
             {
                 //ignore
                 MessageBox.Show(e.ToString());
+                serverStatus.Add("false");
 
             }
             //Cleanup
@@ -950,7 +946,10 @@ namespace ServerManager
                 picBox_ID--;
                 if (onlineCount != 0)
                 {
-                    onlineCount--;
+                    if (serverStatus[i - 1].ToString() == "true")
+                    {
+                        onlineCount--;
+                    }
                 }
             }
             //Errors
@@ -982,12 +981,14 @@ namespace ServerManager
         //deletes a server using IP
         private void button6_Click(object sender, EventArgs e)
         {
+
             int ipLoc = -1;
             try
             {
                 ipLoc = serverIPs.IndexOf(textBox3.Text);
-                editText(textBox3.Text, serverNames[ipLoc].ToString(), false);
                 removeCard(ipLoc);
+                Console.WriteLine(ipLoc);
+                editText(textBox3.Text, serverNames[ipLoc - 1].ToString(), false);
                 label6.Visible = false;
                 label5.Visible = false;
                 label4.Visible = false;
@@ -1130,7 +1131,6 @@ namespace ServerManager
             button5.Visible = true;
             button6.Visible = true;
             pictureBox1.Visible = true;
-            //pictureBox4.Image = Properties.Resources.minusdown;
         }
 
         //animatons
