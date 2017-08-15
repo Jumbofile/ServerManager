@@ -68,7 +68,7 @@ namespace ServerManager
         public bool addingServer = false;
         public bool click = false;
         public string textFile = Properties.Settings.Default.fileLocation;
-
+        public string emailSend = Properties.Settings.Default.fileLocation;
 
         //Rounded corners on application
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -314,7 +314,7 @@ namespace ServerManager
         private void editText(string ip, string name, bool add)
         {
             string path = @textFile;
-
+            Console.WriteLine(name + "," + ip);
             //Adding to text file, adds to end
             if (add == true)
             {
@@ -323,13 +323,13 @@ namespace ServerManager
                     w.WriteLine(name + "," + ip + Environment.NewLine);
                 }
             }
-
-            //removing from text file, slow with HUGE files
-            else
+            else if( add == false)
             {
+                Console.WriteLine(name + "," + ip);
                 var oldLines = File.ReadAllLines(path);
                 var newLines = oldLines.Where(line => !line.Contains(name + "," + ip));
                 File.WriteAllLines(path, newLines);
+                
             }
         }
 
@@ -510,7 +510,7 @@ namespace ServerManager
                 PictureBox pingLabel = new PictureBox();
                 Label serverNameLabel = new Label();
                 Label serverIPLabel = new Label();
-                Panel tesgt = new Panel();
+                Panel cardPanel = new Panel();
                 PictureBox dropShadowCard = new PictureBox();
                 //CustomProgressBar driveSpace = new CustomProgressBar();
 
@@ -528,16 +528,16 @@ namespace ServerManager
                 loadingBar.PerformStep();
 
                 //Panel
-                tesgt.Size = new Size(cardSizeX + 6, cardSizeY + 6);
-                tesgt.Top = startY - 3;
-                tesgt.Left = startX - 3;
+                cardPanel.Size = new Size(cardSizeX + 6, cardSizeY + 6);
+                cardPanel.Top = startY - 3;
+                cardPanel.Left = startX - 3;
                 loadingBar.PerformStep();
 
-                // tesgt.BackColor = Color.Black;
-                tesgt.AutoScroll = true;
-                tesgt.HorizontalScroll.Enabled = false;
-                tesgt.HorizontalScroll.Visible = false;
-                tesgt.Name = "tesgt" + picBox_ID;
+                // cardPanel.BackColor = Color.Black;
+                cardPanel.AutoScroll = true;
+                cardPanel.HorizontalScroll.Enabled = false;
+                cardPanel.HorizontalScroll.Visible = false;
+                cardPanel.Name = "cardPanel" + picBox_ID;
                 loadingBar.PerformStep();
 
                 //Specifics for card
@@ -582,7 +582,7 @@ namespace ServerManager
                 //Adds the server control if we really want to, if we dont do this memory leak
                 if (startUp == true || addingServer == true)
                 {
-                    serverArea.Controls.Add(tesgt);
+                    serverArea.Controls.Add(cardPanel);
                 }
 
                 //Checks for gb in server if we want to, takes ~2 mins with 6 servers with 250+ ms and 30 <1 ms
@@ -691,8 +691,8 @@ namespace ServerManager
                                 driveName.ForeColor = Color.Black;
                                 driveName.Name = "driveName" + picBox_ID;
 
-                                tesgt.Controls.Add(driveName);
-                                tesgt.Controls.Add(driveSpace);
+                                cardPanel.Controls.Add(driveName);
+                                cardPanel.Controls.Add(driveSpace);
 
                                 id++;
                                 strY += 20;
@@ -723,11 +723,11 @@ namespace ServerManager
                 //Adding to form
                 if (startUp == true || addingServer == true)
                 {
-                    tesgt.Controls.Add(serverNameLabel);
-                    tesgt.Controls.Add(pingLabel);
-                    tesgt.Controls.Add(serverIPLabel);
-                    tesgt.Controls.Add(cardBack);
-                    tesgt.Controls.Add(dropShadowCard);
+                    cardPanel.Controls.Add(serverNameLabel);
+                    cardPanel.Controls.Add(pingLabel);
+                    cardPanel.Controls.Add(serverIPLabel);
+                    cardPanel.Controls.Add(cardBack);
+                    cardPanel.Controls.Add(dropShadowCard);
                 }
                 //Ping
                 pingServer (ip, picBox_ID);
@@ -849,7 +849,7 @@ namespace ServerManager
                     Console.WriteLine(i.ToString());
                     //instances of the server card items
                     Console.WriteLine(picBox_ID.ToString());
-                    Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + i);
+                    Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "cardPanel" + i);
                     PictureBox tempBack2 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + i);
                     Label tempLabel2 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverNameLabel" + i);
                     Label tempLabel3 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + i);
@@ -906,7 +906,7 @@ namespace ServerManager
             if (picBox_ID > 0)
             {
                 //setting instance 
-                Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + i);
+                Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "cardPanel" + i);
                 PictureBox tempBack1 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "cardBack" + i);
                 PictureBox tempBack2 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + i);
                 Label tempLabel1 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + i);
@@ -930,7 +930,7 @@ namespace ServerManager
                 {
 
                     //setting instances
-                    Panel temp = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + j);
+                    Panel temp = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "cardPanel" + j);
                     PictureBox temp1 = temp.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "cardBack" + j);
                     PictureBox temp2 = temp.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + j);
                     Label temp3 = temp.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + j);
@@ -939,7 +939,7 @@ namespace ServerManager
                     ProgressBar temp6 = tempPanel.Controls.OfType<ProgressBar>().FirstOrDefault(x => x.Name == "driveSpace" + j);
 
                     //Re naming the cards so we dont have (server2, server3, server6, ect.)
-                    temp.Name = "tesgt" + (j - 1);
+                    temp.Name = "cardPanel" + (j - 1);
                     temp1.Name = "cardBack" + (j - 1);
                     temp2.Name = "pingLabel" + (j - 1);
                     temp3.Name = "serverIPLabel" + (j - 1);
@@ -950,13 +950,13 @@ namespace ServerManager
                 }
                 //Remove servers from counters
                 picBox_ID--;
-                if (onlineCount != 0)
-                {
-                    if (serverStatus[i - 1].ToString() == "true")
-                    {
-                        onlineCount--;
-                    }
-                }
+                //if (onlineCount != 0)
+               // {
+                //    if (serverStatus[i].ToString() == "true")
+                //    {
+                       onlineCount--;
+                  //  }
+                //}
             }
             //Errors
             else
@@ -992,9 +992,11 @@ namespace ServerManager
             try
             {
                 ipLoc = serverIPs.IndexOf(textBox3.Text);
-                removeCard(ipLoc);
-                Console.WriteLine(ipLoc);
-                editText(textBox3.Text, serverNames[ipLoc - 1].ToString(), false);
+                string test = comboBox2.Text;
+                Console.WriteLine(test);
+                ipLoc = ipLoc - 1;
+                removeCard(ipLoc + 1);
+                editText(textBox3.Text, test, false);
                 label6.Visible = false;
                 label5.Visible = false;
                 label4.Visible = false;
@@ -1052,7 +1054,7 @@ namespace ServerManager
                 for (int i = 0; i < temp; i++)
                 {
                     //setting instance 
-                    Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "tesgt" + i);
+                    Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "cardPanel" + i);
                     PictureBox tempBack1 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "cardBack" + i);
                     PictureBox tempBack2 = tempPanel.Controls.OfType<PictureBox>().FirstOrDefault(x => x.Name == "pingLabel" + i);
                     Label tempLabel1 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + i);
@@ -1214,6 +1216,7 @@ namespace ServerManager
         //load button
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            onlineCount = 0;
             picBox_ID = 0;
             addingServer = true;
             selectText();
@@ -1296,7 +1299,6 @@ namespace ServerManager
             {
                 MessageBox.Show("Username or Password is incorrect.", "Error");
             }
-
         }
     }
 }

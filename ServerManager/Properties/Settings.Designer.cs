@@ -58,5 +58,17 @@ namespace ServerManager.Properties {
                 this["password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("null")]
+        public string emailSend {
+            get {
+                return ((string)(this["emailSend"]));
+            }
+            set {
+                this["emailSend"] = value;
+            }
+        }
     }
 }

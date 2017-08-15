@@ -607,7 +607,7 @@ namespace ServerManager
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(428, 215);
+            this.textBox5.Location = new System.Drawing.Point(428, 214);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(187, 20);
             this.textBox5.TabIndex = 39;
