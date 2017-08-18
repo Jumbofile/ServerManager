@@ -49,7 +49,6 @@ namespace ServerManager
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.docsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,6 +85,22 @@ namespace ServerManager
             this.label9 = new System.Windows.Forms.Label();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
+            this.editServerBack = new System.Windows.Forms.PictureBox();
+            this.editServerName = new System.Windows.Forms.Label();
+            this.editServerDrop = new System.Windows.Forms.ComboBox();
+            this.editServerLServer = new System.Windows.Forms.Label();
+            this.editServerLEdit = new System.Windows.Forms.Label();
+            this.editServerBoxIp = new System.Windows.Forms.TextBox();
+            this.editServerBoxName = new System.Windows.Forms.TextBox();
+            this.editServerButtonCn = new System.Windows.Forms.Button();
+            this.editServerButtonAc = new System.Windows.Forms.Button();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -97,6 +112,10 @@ namespace ServerManager
             ((System.ComponentModel.ISupportInitialize)(this.suiteBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editServerBack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             this.SuspendLayout();
             // 
             // fileSystemWatcher1
@@ -248,8 +267,7 @@ namespace ServerManager
             // manageToolStripMenuItem
             // 
             this.manageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statsToolStripMenuItem,
-            this.printToolStripMenuItem});
+            this.statsToolStripMenuItem});
             this.manageToolStripMenuItem.Font = new System.Drawing.Font("Roboto Lt", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.manageToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
@@ -259,14 +277,9 @@ namespace ServerManager
             // statsToolStripMenuItem
             // 
             this.statsToolStripMenuItem.Name = "statsToolStripMenuItem";
-            this.statsToolStripMenuItem.Size = new System.Drawing.Size(123, 28);
-            this.statsToolStripMenuItem.Text = "Stats";
-            // 
-            // printToolStripMenuItem
-            // 
-            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(123, 28);
-            this.printToolStripMenuItem.Text = "Print";
+            this.statsToolStripMenuItem.Size = new System.Drawing.Size(125, 28);
+            this.statsToolStripMenuItem.Text = "Email";
+            this.statsToolStripMenuItem.Click += new System.EventHandler(this.statsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -475,7 +488,7 @@ namespace ServerManager
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(66)))), ((int)(((byte)(66)))));
             this.pictureBox4.Image = global::ServerManager.Properties.Resources.minus;
-            this.pictureBox4.Location = new System.Drawing.Point(41, 227);
+            this.pictureBox4.Location = new System.Drawing.Point(41, 225);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(60, 60);
             this.pictureBox4.TabIndex = 29;
@@ -612,6 +625,159 @@ namespace ServerManager
             this.textBox5.Size = new System.Drawing.Size(187, 20);
             this.textBox5.TabIndex = 39;
             // 
+            // pictureBox6
+            // 
+            this.pictureBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(136)))), ((int)(((byte)(229)))));
+            this.pictureBox6.Location = new System.Drawing.Point(744, 73);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(243, 73);
+            this.pictureBox6.TabIndex = 44;
+            this.pictureBox6.TabStop = false;
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(755, 88);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(221, 20);
+            this.textBox6.TabIndex = 45;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(755, 114);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 24);
+            this.button1.TabIndex = 46;
+            this.button1.Text = "Set";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(836, 114);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 24);
+            this.button7.TabIndex = 47;
+            this.button7.Text = "Cancel";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // pictureBox7
+            // 
+            this.pictureBox7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(66)))), ((int)(((byte)(66)))));
+            this.pictureBox7.Image = global::ServerManager.Properties.Resources.edit2;
+            this.pictureBox7.Location = new System.Drawing.Point(38, 359);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(60, 60);
+            this.pictureBox7.TabIndex = 48;
+            this.pictureBox7.TabStop = false;
+            this.pictureBox7.Click += new System.EventHandler(this.pictureBox7_Click);
+            this.pictureBox7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox7_MouseDown);
+            this.pictureBox7.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox7_MouseUp);
+            // 
+            // editServerBack
+            // 
+            this.editServerBack.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.editServerBack.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.editServerBack.Location = new System.Drawing.Point(414, 165);
+            this.editServerBack.Name = "editServerBack";
+            this.editServerBack.Size = new System.Drawing.Size(213, 172);
+            this.editServerBack.TabIndex = 49;
+            this.editServerBack.TabStop = false;
+            // 
+            // editServerName
+            // 
+            this.editServerName.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.editServerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.editServerName.Location = new System.Drawing.Point(414, 165);
+            this.editServerName.Name = "editServerName";
+            this.editServerName.Size = new System.Drawing.Size(213, 20);
+            this.editServerName.TabIndex = 50;
+            this.editServerName.Text = "Edit Server";
+            this.editServerName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // editServerDrop
+            // 
+            this.editServerDrop.FormattingEnabled = true;
+            this.editServerDrop.Location = new System.Drawing.Point(427, 204);
+            this.editServerDrop.Name = "editServerDrop";
+            this.editServerDrop.Size = new System.Drawing.Size(187, 21);
+            this.editServerDrop.TabIndex = 51;
+            this.editServerDrop.SelectedIndexChanged += new System.EventHandler(this.editServerDrop_SelectedIndexChanged);
+            // 
+            // editServerLServer
+            // 
+            this.editServerLServer.AutoSize = true;
+            this.editServerLServer.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.editServerLServer.Location = new System.Drawing.Point(424, 188);
+            this.editServerLServer.Name = "editServerLServer";
+            this.editServerLServer.Size = new System.Drawing.Size(38, 13);
+            this.editServerLServer.TabIndex = 52;
+            this.editServerLServer.Text = "Server";
+            // 
+            // editServerLEdit
+            // 
+            this.editServerLEdit.AutoSize = true;
+            this.editServerLEdit.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.editServerLEdit.Location = new System.Drawing.Point(424, 228);
+            this.editServerLEdit.Name = "editServerLEdit";
+            this.editServerLEdit.Size = new System.Drawing.Size(73, 13);
+            this.editServerLEdit.TabIndex = 53;
+            this.editServerLEdit.Text = "Server Values";
+            // 
+            // editServerBoxIp
+            // 
+            this.editServerBoxIp.Location = new System.Drawing.Point(427, 275);
+            this.editServerBoxIp.Name = "editServerBoxIp";
+            this.editServerBoxIp.Size = new System.Drawing.Size(187, 20);
+            this.editServerBoxIp.TabIndex = 56;
+            // 
+            // editServerBoxName
+            // 
+            this.editServerBoxName.Location = new System.Drawing.Point(427, 249);
+            this.editServerBoxName.Name = "editServerBoxName";
+            this.editServerBoxName.Size = new System.Drawing.Size(187, 20);
+            this.editServerBoxName.TabIndex = 55;
+            // 
+            // editServerButtonCn
+            // 
+            this.editServerButtonCn.Location = new System.Drawing.Point(539, 304);
+            this.editServerButtonCn.Name = "editServerButtonCn";
+            this.editServerButtonCn.Size = new System.Drawing.Size(75, 23);
+            this.editServerButtonCn.TabIndex = 58;
+            this.editServerButtonCn.Text = "Cancel";
+            this.editServerButtonCn.UseVisualStyleBackColor = true;
+            this.editServerButtonCn.Click += new System.EventHandler(this.editServerButtonCn_Click);
+            // 
+            // editServerButtonAc
+            // 
+            this.editServerButtonAc.Location = new System.Drawing.Point(427, 304);
+            this.editServerButtonAc.Name = "editServerButtonAc";
+            this.editServerButtonAc.Size = new System.Drawing.Size(75, 23);
+            this.editServerButtonAc.TabIndex = 57;
+            this.editServerButtonAc.Text = "Accept";
+            this.editServerButtonAc.UseVisualStyleBackColor = true;
+            this.editServerButtonAc.Click += new System.EventHandler(this.editServerButtonAc_Click);
+            // 
+            // pictureBox8
+            // 
+            this.pictureBox8.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBox8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox8.Location = new System.Drawing.Point(540, 301);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(174, 64);
+            this.pictureBox8.TabIndex = 59;
+            this.pictureBox8.TabStop = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.label10.Location = new System.Drawing.Point(597, 328);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(62, 13);
+            this.label10.TabIndex = 60;
+            this.label10.Text = "Updating....";
+            // 
             // Suite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -619,6 +785,22 @@ namespace ServerManager
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.BackgroundImage = global::ServerManager.Properties.Resources.png2;
             this.ClientSize = new System.Drawing.Size(1006, 643);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.pictureBox8);
+            this.Controls.Add(this.editServerButtonAc);
+            this.Controls.Add(this.editServerButtonCn);
+            this.Controls.Add(this.editServerBoxName);
+            this.Controls.Add(this.editServerBoxIp);
+            this.Controls.Add(this.editServerLEdit);
+            this.Controls.Add(this.editServerLServer);
+            this.Controls.Add(this.editServerDrop);
+            this.Controls.Add(this.editServerName);
+            this.Controls.Add(this.editServerBack);
+            this.Controls.Add(this.pictureBox7);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.pictureBox6);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBox4);
@@ -672,6 +854,10 @@ namespace ServerManager
             ((System.ComponentModel.ISupportInitialize)(this.suiteBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editServerBack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -700,7 +886,6 @@ namespace ServerManager
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem statsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem docsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem contactToolStripMenuItem;
         private System.Windows.Forms.Label label4;
@@ -733,6 +918,22 @@ namespace ServerManager
         private Label label8;
         private Label label9;
         private PictureBox pictureBox5;
+        private Button button7;
+        private Button button1;
+        private TextBox textBox6;
+        private PictureBox pictureBox6;
+        private PictureBox pictureBox7;
+        private Label editServerName;
+        private PictureBox editServerBack;
+        private Button editServerButtonAc;
+        private Button editServerButtonCn;
+        private TextBox editServerBoxName;
+        private TextBox editServerBoxIp;
+        private Label editServerLEdit;
+        private Label editServerLServer;
+        private ComboBox editServerDrop;
+        private Label label10;
+        private PictureBox pictureBox8;
     }
 }
 

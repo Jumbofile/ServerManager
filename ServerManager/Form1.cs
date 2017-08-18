@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Management;
 using System.IO;
 using System.DirectoryServices.AccountManagement;
+using System.Net.Mail;
 
 namespace ServerManager
 {
@@ -68,7 +69,9 @@ namespace ServerManager
         public bool addingServer = false;
         public bool click = false;
         public string textFile = Properties.Settings.Default.fileLocation;
-        public string emailSend = Properties.Settings.Default.fileLocation;
+        public string emailSend = Properties.Settings.Default.emailSend;
+        string temp1;
+        string temp2;
 
         //Rounded corners on application
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -119,6 +122,23 @@ namespace ServerManager
             button2.Visible = false;
             button3.Visible = false;
             pictureBox2.Visible = false;
+            label10.Visible = false;
+            pictureBox8.Visible = false;
+
+            editServerBack.Visible = false;
+            editServerBoxIp.Visible = false;
+            editServerBoxName.Visible = false;
+            editServerButtonAc.Visible = false;
+            editServerButtonCn.Visible = false;
+            editServerDrop.Visible = false;
+            editServerLServer.Visible = false;
+            editServerName.Visible = false;
+            editServerLEdit.Visible = false;
+
+            pictureBox6.Visible = false;
+            textBox6.Visible = false;
+            button1.Visible = false;
+            button7.Visible = false;
 
             //Loading stuff 
             loadingBar.Visible = false;
@@ -138,9 +158,9 @@ namespace ServerManager
 
             //Setting background color
             BackColor = Color.FromArgb(25, 118, 210);
- 
+
             //login
-            setEmailAccount(); 
+            setEmailAccount();
         }
 
         //read textfile
@@ -192,6 +212,10 @@ namespace ServerManager
                     }
                 }
             }
+            finally
+            {
+
+            }
         }
 
         //Log in using email account
@@ -203,6 +227,7 @@ namespace ServerManager
             totalLabel.Visible = false;
             onlineLabel.Visible = false;
             pictureBox3.Visible = false;
+            pictureBox7.Visible = false;
             pictureBox4.Visible = false;
 
             //admin login
@@ -219,7 +244,7 @@ namespace ServerManager
             panel.Size = new Size(200, 175);
             panel.Location = new Point((Width / 2) - 100, (Height / 2) - 100);
             panel.BorderStyle = BorderStyle.FixedSingle;
-            panel.BackColor = Color.FromArgb(233,233,233);
+            panel.BackColor = Color.FromArgb(233, 233, 233);
 
             header.AutoSize = false;
             header.Size = new Size(200, 40);
@@ -235,7 +260,7 @@ namespace ServerManager
             user.Text = "Username";
             user.Font = new Font("Roboto cn", 12F);
             user.ForeColor = Color.Black;
-            user.BackColor = Color.FromArgb(233,233,233);
+            user.BackColor = Color.FromArgb(233, 233, 233);
             user.TextAlign = ContentAlignment.MiddleCenter;
 
             userForm.Size = new Size(150, 20);
@@ -269,7 +294,7 @@ namespace ServerManager
             //Pressing login
             acceptButton.Click += new EventHandler(acceptButton_Click);
         }
-  
+
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
@@ -279,39 +304,47 @@ namespace ServerManager
 
 
             //Login correct?
-            bool valid = false;
-            using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
+            if (emailUsername.Contains('@'))
             {
-                valid = context.ValidateCredentials(emailUsername, emailPassword);
-            }
+                bool valid = false;
+                using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
+                {
+                    valid = context.ValidateCredentials(emailUsername, emailPassword);
+                }
 
-            if (valid == true)
-            {
-                //everything is correct, login and show main screen
-                menuStrip1.Visible = true;
-                overViewlabel.Visible = true;
-                totalLabel.Visible = true;
-                onlineLabel.Visible = true;
-                pictureBox3.Visible = true;
-                pictureBox4.Visible = true;
-                panel.Controls.Remove(header);
-                panel.Controls.Remove(userForm);
-                panel.Controls.Remove(user);
-                panel.Controls.Remove(passForm);
-                panel.Controls.Remove(pass);
-                panel.Controls.Remove(acceptButton);
-                Controls.Remove(panel);
-                loggedIn = true;
-                guiInit();
+                if (valid == true)
+                {
+                    //everything is correct, login and show main screen
+                    menuStrip1.Visible = true;
+                    overViewlabel.Visible = true;
+                    totalLabel.Visible = true;
+                    onlineLabel.Visible = true;
+                    pictureBox3.Visible = true;
+                   // pictureBox7.Visible = true;
+                    pictureBox4.Visible = true;
+                    panel.Controls.Remove(header);
+                    panel.Controls.Remove(userForm);
+                    panel.Controls.Remove(user);
+                    panel.Controls.Remove(passForm);
+                    panel.Controls.Remove(pass);
+                    panel.Controls.Remove(acceptButton);
+                    Controls.Remove(panel);
+                    loggedIn = true;
+                    guiInit();
+                }
+                //Error
+                else
+                {
+                    MessageBox.Show("Username or Password is incorrect.", "Error");
+                }
             }
-            //Error
             else
             {
-                MessageBox.Show("Username or Password is incorrect.", "Error");
+                MessageBox.Show("Enter a valid Email", "Error");
             }
         }
         //editing text file
-        private void editText(string ip, string name, bool add)
+        private void editText(string ip, string name, bool add, bool edit)
         {
             string path = @textFile;
             Console.WriteLine(name + "," + ip);
@@ -319,18 +352,37 @@ namespace ServerManager
             if (add == true)
             {
                 using (StreamWriter w = File.AppendText(path))
-                {  
-                    w.WriteLine(name + "," + ip + Environment.NewLine);
+                {
+                    string lineToEdit = temp1 + "," + temp2;
+                    string lineToWrite = editServerBoxName.Text + "," + editServerBoxIp.Text;
+                    if (edit == true)
+                    {
+                        w.Close();
+                        string text = File.ReadAllText(path);
+                        text = text.Replace(lineToEdit, lineToWrite);
+                        File.WriteAllText(path, text);
+                        int test = editServerDrop.SelectedIndex;
+                        Console.WriteLine("EditText: " + test);
+                        picBox_ID = test;
+                        serverCard(1, test);
+                    }
+                    else
+                    {
+                        w.WriteLine(name + "," + ip + Environment.NewLine);
+                        w.Close();
+                    }
                 }
             }
-            else if( add == false)
+            else if (add == false && edit == false)
             {
                 Console.WriteLine(name + "," + ip);
                 var oldLines = File.ReadAllLines(path);
                 var newLines = oldLines.Where(line => !line.Contains(name + "," + ip));
-                File.WriteAllLines(path, newLines);
-                
+                File.WriteAllLines(path, newLines);       
             }
+
+            
+            
         }
 
         //making cards using text files
@@ -343,6 +395,7 @@ namespace ServerManager
                 serverCard(1, i);
 
             }
+
         }
 
         //Sets up the default GUI for the program
@@ -419,7 +472,7 @@ namespace ServerManager
             Controls.Add(serverArea);
 
             //Timer for 15min interval
-            MyTimer.Interval = (60000 * 5);
+            MyTimer.Interval = (60000 * 10);
             MyTimer.Tick += new EventHandler(MyTimer_Tick);
             MyTimer.Start();
 
@@ -453,8 +506,9 @@ namespace ServerManager
                 if (MessageBox.Show("Load Servers from a text Document?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //text read
-                    MessageBox.Show(Properties.Settings.Default.fileLocation);
+                   //MessageBox.Show("Loaded from " + Properties.Settings.Default.fileLocation);
                     selectText();
+                    MessageBox.Show("Loaded from " + Properties.Settings.Default.fileLocation);
                     textRead();
                     textToCard(serverIPs.Count);
 
@@ -473,6 +527,8 @@ namespace ServerManager
         public void serverCard(int num, int count)
         {
             //Vars
+            Console.WriteLine(count);
+            int test = serverIPs.IndexOf(editServerBoxIp.Text);
             string ip = serverIPs[count].ToString();
             string name = serverNames[count].ToString();
             int roundTripMS = ms;
@@ -516,7 +572,7 @@ namespace ServerManager
 
                 //setting loading text
                 loadingLabel.Text = ("Loading " + ip + "...");
-                
+
                 //Drop shadow
                 dropShadowCard.Image = Properties.Resources.fewfew1;
                 dropShadowCard.BackgroundImageLayout = ImageLayout.Center;
@@ -567,7 +623,7 @@ namespace ServerManager
 
                 //Server IP and server ms using the ping method with 4 cycles
                 string temp = roundTripMS.ToString();
-                if(temp == "0")     //Below 1 is <1 because we use ints and dont want 0 to appear
+                if (temp == "0")     //Below 1 is <1 because we use ints and dont want 0 to appear
                 {
                     temp = "<1";
                 }
@@ -714,7 +770,7 @@ namespace ServerManager
                     //Access denied error, prevents stupid crashing when dev
                     catch (Exception e)
                     {
-                        
+
                     }
                     Console.ReadLine();
                 }
@@ -730,8 +786,8 @@ namespace ServerManager
                     cardPanel.Controls.Add(dropShadowCard);
                 }
                 //Ping
-                pingServer (ip, picBox_ID);
-                
+                pingServer(ip, picBox_ID);
+
 
                 //Addding id
                 picBox_ID++;
@@ -750,15 +806,15 @@ namespace ServerManager
             totalLabel.Text = ((int)netUsed + "/" + (int)netTotal + " GB");
 
             //We dont always want to look for GB sizes, takes too long and doesnt change too much
-            if(picBox_ID == serverIPs.Count)
+            if (picBox_ID == serverIPs.Count)
             {
                 gbTrue = false;
             }
-            
+
             //RE adding servers to array
             populateCombo();
 
-            if(picBox_ID == (serverIPs.Count))
+            if (picBox_ID == (serverIPs.Count))
             {
                 addingServer = false;
             }
@@ -792,9 +848,9 @@ namespace ServerManager
                     serverNames.Add(textBox1.Text);
                     serverIPs.Add(textBox2.Text);
                     Console.WriteLine(textBox1.Text + textBox2.Text);
-                    editText(textBox2.Text, textBox1.Text, true);
+                    editText(textBox2.Text, textBox1.Text, true, false);
                     serverCard(1, picBox_ID);
-                    
+
                 }
             }
 
@@ -828,7 +884,7 @@ namespace ServerManager
             Ping pinger = new Ping();
             long roundTripMS = 0;
             serverCount = 0;
-            
+
             try
             {
                 //Pings 4 times to make sure server is online
@@ -837,7 +893,7 @@ namespace ServerManager
                     PingReply reply = pinger.Send(ip);
                     pingable = reply.Status == IPStatus.Success;
                     roundTripMS = reply.RoundtripTime;
-                    if (pingable == true) 
+                    if (pingable == true)
                     {
                         pingCount++;
                     }
@@ -846,7 +902,7 @@ namespace ServerManager
                 //Server is online, do stuff
                 if (pingCount == 4)
                 {
-                    Console.WriteLine(i.ToString());
+                    Console.WriteLine("Ping: " + i);
                     //instances of the server card items
                     Console.WriteLine(picBox_ID.ToString());
                     Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "cardPanel" + i);
@@ -861,7 +917,17 @@ namespace ServerManager
                         temp = "<1";
                     }
 
-                    serverStatus.Add("true");
+                    if (serverStatus.Count != serverIPs.Count)
+                    {
+                        serverStatus.Add("true");
+                    }
+                    else
+                    {
+                        if (serverStatus[i].ToString() == "false")
+                        {
+                            serverStatus[i] = "True";
+                        }
+                    }
 
                     //Setting IP and MS
                     tempLabel2.BackColor = Color.FromArgb(76, 175, 80);
@@ -877,11 +943,23 @@ namespace ServerManager
 
             }
             //Error
-            catch (PingException e)
+            catch (PingException)
             {
                 //ignore
-                MessageBox.Show(e.ToString());
-                serverStatus.Add("false");
+                if (serverStatus.Count != serverIPs.Count)
+                {
+                    serverStatus.Add("false");
+                }
+                else
+                {
+                    Console.WriteLine("Ping excep: " + i);
+                    Console.WriteLine(serverStatus.Count);
+                    if (serverStatus[i].ToString() == "true")
+                    {
+                        serverStatus[i] = "false";
+                        emailSender(i);
+                    }
+                }
 
             }
             //Cleanup
@@ -897,11 +975,14 @@ namespace ServerManager
         //Remove Card
         private void removeCard(int i)
         {
+
             /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
              * 
              * subtract the gb of the server removed from the shit(total and used net)
              * 
              * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            Console.WriteLine(picBox_ID);
+            Console.WriteLine(i);
 
             if (picBox_ID > 0)
             {
@@ -944,19 +1025,21 @@ namespace ServerManager
                     temp2.Name = "pingLabel" + (j - 1);
                     temp3.Name = "serverIPLabel" + (j - 1);
                     temp4.Name = "serverNameLabel" + (j - 1);
-                    temp5.Name = "dropShadowCard" + (j - 1);
-                    temp5.Name = "driveSpace" + (j - 1);
+                    // temp5.Name = "dropShadowCard" + (j - 1);
+                    // temp5.Name = "driveSpace" + (j - 1);
 
                 }
                 //Remove servers from counters
                 picBox_ID--;
-                //if (onlineCount != 0)
-               // {
-                //    if (serverStatus[i].ToString() == "true")
-                //    {
-                       onlineCount--;
-                  //  }
-                //}
+
+                bool pingable;
+                Ping pinger = new Ping();
+                PingReply reply = pinger.Send(textBox3.Text);
+                pingable = reply.Status == IPStatus.Success;
+                if (pingable == true)
+                {
+                    onlineCount--;
+                }
             }
             //Errors
             else
@@ -965,7 +1048,7 @@ namespace ServerManager
             }
 
             //Update count and arrays
-            onlineLabel.Text = (onlineCount + "/" + serverIPs.Count+ " Online");
+            onlineLabel.Text = (onlineCount + "/" + serverIPs.Count + " Online");
             populateCombo();
 
         }
@@ -984,19 +1067,18 @@ namespace ServerManager
 
         }
 
-        //deletes a server using IP
+        //deletes a server using IP THIS IS BROKEN DONT KNOW WHY
         private void button6_Click(object sender, EventArgs e)
         {
 
-            int ipLoc = -1;
+            int i = serverIPs.IndexOf(textBox3.Text);
             try
             {
-                ipLoc = serverIPs.IndexOf(textBox3.Text);
-                string test = comboBox2.Text;
-                Console.WriteLine(test);
-                ipLoc = ipLoc - 1;
-                removeCard(ipLoc + 1);
-                editText(textBox3.Text, test, false);
+                removeCard(i);
+                editText(textBox3.Text, comboBox2.Text, false, false);
+                Refresh();
+
+                //hiding prompt
                 label6.Visible = false;
                 label5.Visible = false;
                 label4.Visible = false;
@@ -1006,10 +1088,10 @@ namespace ServerManager
                 button6.Visible = false;
                 pictureBox1.Visible = false;
                 textBox3.Text = "";
-                
+
             }
             //Error
-            catch
+            catch(PingException)
             {
                 MessageBox.Show("Server IP not found.", "Error");
             }
@@ -1177,6 +1259,8 @@ namespace ServerManager
         //Timer that goes off every 5 mins
         private void MyTimer_Tick(object sender, EventArgs e)
         {
+            pictureBox8.Visible = true;
+            label10.Visible = true;
             onlineCount = 0;
             picBox_ID = 0;
             int num = serverIPs.Count;
@@ -1184,12 +1268,15 @@ namespace ServerManager
             {
                 serverCard(1, i);
             }
-            
+            label10.Visible = false;
+            pictureBox8.Visible = false;
         }
 
         //timers that go off every 24 hours
         private void Timer24_Tick(object sender, EventArgs e)
         {
+            label10.Visible = true;
+            pictureBox8.Visible = true;
             onlineCount = 0;
             picBox_ID = 0;
             int num = serverIPs.Count;
@@ -1198,6 +1285,8 @@ namespace ServerManager
                 serverCard(1, i);
                 gbTrue = true;
             }
+            label10.Visible = false;
+            pictureBox8.Visible = false;
         }
 
         //Save button
@@ -1222,7 +1311,7 @@ namespace ServerManager
             selectText();
             textRead();
             textToCard(serverIPs.Count);
-            
+
         }
 
         //prompting user to select a text file
@@ -1256,11 +1345,11 @@ namespace ServerManager
             //MessageBox.Show("Test");
             username = textBox5.Text;
             password = textBox4.Text;
-            
+
             Properties.Settings.Default.username = textBox5.Text;
             Properties.Settings.Default.password = textBox4.Text;
             Properties.Settings.Default.Save();
-            MessageBox.Show(Properties.Settings.Default.username);
+            //MessageBox.Show(Properties.Settings.Default.username);
             bool valid = false;
             using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
             {
@@ -1282,7 +1371,7 @@ namespace ServerManager
                 if (MessageBox.Show("Load Servers from a text Document?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //text read
-                    MessageBox.Show(Properties.Settings.Default.fileLocation);
+                    //MessageBox.Show(Properties.Settings.Default.fileLocation);
                     addingServer = true;
                     selectText();
                     textRead();
@@ -1300,5 +1389,168 @@ namespace ServerManager
                 MessageBox.Show("Username or Password is incorrect.", "Error");
             }
         }
+
+        public void emailSender(int i)
+        {
+            MailMessage msg = new MailMessage();
+            msg.To.Add(new MailAddress(emailSend));
+            msg.From = new MailAddress(emailUsername);
+            msg.Subject = "Server Alert";
+            msg.Body = "Server " + serverNames[i] + " is down.";
+            msg.IsBodyHtml = true;
+
+            SmtpClient client = new SmtpClient();
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+            client.Port = 587; // You can use Port 25 if 587 is blocked
+            client.Host = "smtp.office365.com";
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            try
+            {
+                client.Send(msg);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void statsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pictureBox6.Visible = true;
+            textBox6.Visible = true;
+            button1.Visible = true;
+            button7.Visible = true;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            pictureBox6.Visible = false;
+            textBox6.Visible = false;
+            button1.Visible = false;
+            button7.Visible = false;
+            textBox6.Text = "";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            emailSend = textBox6.Text;
+            Properties.Settings.Default.emailSend = textBox6.Text;
+            Properties.Settings.Default.Save();
+            textBox6.Text = Properties.Settings.Default.emailSend;
+            pictureBox6.Visible = false;
+            textBox6.Visible = false;
+            button1.Visible = false;
+            button7.Visible = false;
+
+            MessageBox.Show("Notification email set.");
+        }
+
+        //edit server
+        private void pictureBox7_Click(object sender, EventArgs e)
+        {
+            //first remove the stuff
+            editServerDrop.Items.Clear();
+
+            //then add them cause u need them
+            for (int i = 0; i < serverNames.Count; i++)
+            {
+                editServerDrop.Items.Add(serverNames[i]);
+            }
+
+            editServerBack.Visible = true;
+            editServerBoxIp.Visible = true;
+            editServerBoxName.Visible = true;
+            editServerButtonAc.Visible = true;
+            editServerButtonCn.Visible = true;
+            editServerDrop.Visible = true;
+            editServerLServer.Visible = true;
+            editServerName.Visible = true;
+            editServerLEdit.Visible = true;
+
+        }
+
+        //animatons
+        private void pictureBox7_MouseDown(object sender, MouseEventArgs e)  //down
+        {
+            pictureBox7.Image = Properties.Resources.editdown1;
+            Invalidate();
+            Refresh();
+        }
+        private void pictureBox7_MouseUp(object sender, MouseEventArgs e)  //up
+        {
+            pictureBox7.Image = Properties.Resources.edit2;
+            Invalidate();
+            Refresh();
+        }
+
+        private void editServerDrop_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            int j = serverNames.IndexOf(editServerDrop.SelectedItem);
+
+            editServerBoxName.Text = serverNames[j].ToString(); //OUT OF RANGE
+            editServerBoxIp.Text = serverIPs[j].ToString();
+
+            temp1 = serverNames[j].ToString();
+            temp2 = serverIPs[j].ToString();
+        }
+
+        private void editServerButtonAc_Click(object sender, EventArgs e)
+        {
+            int j = serverNames.IndexOf(editServerDrop.SelectedItem);
+
+            Panel tempPanel = serverArea.Controls.OfType<Panel>().FirstOrDefault(x => x.Name == "cardPanel" + j);
+            Label tempLabel1 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverIPLabel" + j);
+            Label tempLabel2 = tempPanel.Controls.OfType<Label>().FirstOrDefault(x => x.Name == "serverNameLabel" + j);
+
+            string ip = serverIPs[j].ToString();
+
+            string path = @textFile;
+
+            string lineToEdit = temp1 + "," + temp2;
+
+            string lineToWrite = editServerBoxName.Text + "," + editServerBoxIp.Text;
+
+            tempLabel2.Text = editServerBoxName.Text;
+             tempLabel1.Text = "IP: " + editServerBoxIp.Text + ", MS: " + ms;
+             pingServer(editServerBoxIp.Text, j);
+
+            /*
+             * 
+             * CALL EDIT TEXT METHOD
+             * 
+             */
+
+            serverIPs[j] = editServerBoxIp.Text;
+            editText(editServerBoxIp.Text, editServerDrop.Text, true, true);
+
+
+            editServerBack.Visible = false;
+            editServerBoxIp.Visible = false;
+            editServerBoxName.Visible = false;
+            editServerButtonAc.Visible = false;
+            editServerButtonCn.Visible = false;
+            editServerDrop.Visible = false;
+            editServerLServer.Visible = false;
+            editServerName.Visible = false;
+            editServerLEdit.Visible = false;
+        }
+
+        private void editServerButtonCn_Click(object sender, EventArgs e)
+        {
+            editServerBack.Visible = false;
+            editServerBoxIp.Visible = false;
+            editServerBoxName.Visible = false;
+            editServerButtonAc.Visible = false;
+            editServerButtonCn.Visible = false;
+            editServerDrop.Visible = false;
+            editServerLServer.Visible = false;
+            editServerName.Visible = false;
+            editServerLEdit.Visible = false;
+        }
+
     }
 }
